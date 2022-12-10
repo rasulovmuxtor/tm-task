@@ -1,0 +1,3 @@
+DEBUG=1
+ALLOWED_HOSTS=*
+SECRET_KEY=insecure-ksjnsatr6tnh2z3euo03*l7hd6$1awr01p=h9xr$i$-ktmo3r)qo-u
