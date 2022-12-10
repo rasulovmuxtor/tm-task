@@ -11,6 +11,7 @@ from rest_framework_simplejwt.views import (
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api/', include('warehouse.urls')),
 
     # jwt endpoints
     path('api/token/', TokenObtainPairView.as_view(),
