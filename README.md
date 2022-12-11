@@ -20,7 +20,7 @@ docker compose run django python3 manage.py migrate
 Load warehouse dump data:
 
 ```
-docker compose run django python3 manage.py loaddata dump.json
+docker compose run django python3 manage.py loaddata warehouse/fixtures/dump.json
 ```
 
 run:
