@@ -176,6 +176,6 @@ REST_FRAMEWORK = {
         "%m/%d/%Y, %H:%M %p",
         "iso-8601",
     ],
-
+    'DEFAULT_RENDERER_CLASSES': ['config.drf_renderers.ResultsJSONRenderer'],
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }

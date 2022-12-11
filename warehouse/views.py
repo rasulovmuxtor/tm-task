@@ -1,10 +1,11 @@
 from rest_framework import status
-from rest_framework.generics import CreateAPIView, ListAPIView
-from rest_framework.renderers import JSONOpenAPIRenderer, JSONRenderer
+from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
-
+from rest_framework.views import APIView
+from drf_spectacular.utils import extend_schema
 from warehouse import models, serializers
 from warehouse.utils import get_warehouses_for_products
+from warehouse import schema
 
 
 class ProductListAPIView(ListAPIView):
@@ -12,24 +13,15 @@ class ProductListAPIView(ListAPIView):
     serializer_class = serializers.ProductModelSerializer
 
 
-class ProductMaterialAPIView(CreateAPIView):
+class ProductMaterialAPIView(APIView):
     serializer_class = serializers.CreateProductSerializer
-    # swagger schema properties
-    pagination_class = None
-    filter_backends = []  # type: ignore
-    renderer_classes = [JSONOpenAPIRenderer, JSONRenderer]
 
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
+    @extend_schema(
+        request=serializer_class(many=True),
+        responses=schema.ProductMaterialsSerializer(many=True)
+    )
+    def post(self, request, *args, **kwargs):
+        serializer = self.serializer_class(data=request.data, many=True)
         serializer.is_valid(raise_exception=True)
-
-        data = self.get_response_data(serializer.validated_data)
+        data = get_warehouses_for_products(serializer.validated_data)
         return Response(data, status=status.HTTP_200_OK)
-
-    def get_response_data(self, validated_data: list) -> dict:
-        results = get_warehouses_for_products(validated_data)
-        return {'results': results}
-
-    def get_serializer(self, *args, **kwargs):
-        kwargs.setdefault('many', True)  # swagger schema is generated based
-        return self.serializer_class(*args, **kwargs)

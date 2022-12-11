@@ -2,6 +2,8 @@ from rest_framework import serializers
 
 from warehouse import models
 
+from warehouse.utils import get_warehouses_for_products
+
 
 class ProductModelSerializer(serializers.ModelSerializer):
     class Meta:
